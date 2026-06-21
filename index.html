@@ -86,9 +86,9 @@
             border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
-        /* ================= MAIN APP STYLES (HIDDEN UNTIL LOGIN) ================= */
+        /* ================= MAIN APP STYLES ================= */
         .app-content {
-            display: none; /* Hidden by default */
+            display: none; 
             flex-direction: column;
             min-height: 100vh;
             padding-bottom: 75px;
@@ -459,7 +459,7 @@
             <div id="page-dashboard" class="app-page active-page">
                 <div class="wallet-card">
                     <div class="card-label">Available Balance</div>
-                    <div class="balance-display">$507.00</div>
+                    <div class="balance-display">$527.00</div>
                     <div class="card-meta">
                         <div>•••• •••• •••• 2026</div>
                         <div style="font-weight: 600; color:#10b981;">TRC20 Network</div>
@@ -487,16 +487,16 @@
                     <div class="tx-item">
                         <div class="tx-info">
                             <h4>TRC20 Deposit</h4>
-                            <p>Today, 10:14 AM</p>
+                            <p>Just now</p>
                         </div>
-                        <div class="tx-amount plus">+$120.00</div>
+                        <div class="tx-amount plus">+$20.00</div>
                     </div>
                     <div class="tx-item">
                         <div class="tx-info">
-                            <h4>Binance Payout</h4>
-                            <p>Yesterday, 04:32 PM</p>
+                            <h4>TRC20 Deposit</h4>
+                            <p>Today, 10:14 AM</p>
                         </div>
-                        <div class="tx-amount pending">Pending</div>
+                        <div class="tx-amount plus">+$120.00</div>
                     </div>
                 </div>
             </div>
@@ -551,6 +551,13 @@
                 <p style="font-size:12px; color:#64748b; margin-top:-15px; margin-bottom:5px;">Past 5 Days Statement</p>
                 
                 <div class="ledger-section">
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>TRC20 Deposit</h4>
+                            <p>21 June 2026 • 04:15 PM</p>
+                        </div>
+                        <div class="tx-amount plus">+$20.00</div>
+                    </div>
                     <div class="tx-item">
                         <div class="tx-info">
                             <h4>TRC20 Deposit</h4>
@@ -614,19 +621,15 @@
 
     <!-- ================= LOGIC SCRIPT ================= -->
     <script>
-        // Login Verification Function
         function validateLogin() {
             const userInp = document.getElementById('usernameInput').value.trim();
             const passInp = document.getElementById('passwordInput').value;
             const errorDiv = document.getElementById('loginError');
 
-            // Exact match validation
             if (userInp === 'Ali78' && passInp === 'Ali@7890') {
                 errorDiv.style.display = 'none';
-                // Hide Login gate with animation style
                 document.getElementById('loginGate').style.opacity = '0';
                 document.getElementById('loginGate').style.visibility = 'hidden';
-                // Render Application Main UI
                 document.getElementById('appContent').style.display = 'flex';
             } else {
                 errorDiv.style.display = 'block';
@@ -634,7 +637,6 @@
             }
         }
 
-        // SPA Tab switcher engine
         function switchPage(pageId) {
             const pages = document.querySelectorAll('.app-page');
             pages.forEach(page => page.classList.remove('active-page'));
