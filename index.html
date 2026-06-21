@@ -459,7 +459,7 @@
             <div id="page-dashboard" class="app-page active-page">
                 <div class="wallet-card">
                     <div class="card-label">Available Balance</div>
-                    <div class="balance-display">$527.00</div>
+                    <div id="mainBalance" class="balance-display">$550.00</div>
                     <div class="card-meta">
                         <div>•••• •••• •••• 2026</div>
                         <div style="font-weight: 600; color:#10b981;">TRC20 Network</div>
@@ -484,12 +484,20 @@
                 <div class="ledger-section">
                     <div class="section-title">Recent Activity</div>
                     
+                    <div id="recentWithdrawRow" class="tx-item" style="display:none;">
+                        <div class="tx-info">
+                            <h4>Binance Withdrawal</h4>
+                            <p>Just now</p>
+                        </div>
+                        <div class="tx-amount pending">Pending</div>
+                    </div>
+
                     <div class="tx-item">
                         <div class="tx-info">
                             <h4>TRC20 Deposit</h4>
                             <p>Just now</p>
                         </div>
-                        <div class="tx-amount plus">+$20.00</div>
+                        <div class="tx-amount plus">+$23.00</div>
                     </div>
                     <div class="tx-item">
                         <div class="tx-info">
@@ -541,7 +549,7 @@
                         <input type="text" class="form-input" value="$550" readonly style="color:#94a3b8; background-color:#0f172a;">
                         <p style="font-size:11px; color:#ef4444; margin-top:5px;">⚠️ Withdrawal is fixed at exactly $550 for your tier.</p>
                     </div>
-                    <button class="submit-btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c);" onclick="alert('Withdrawal request processing.')">Process Withdrawal</button>
+                    <button class="submit-btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c);" onclick="executeWithdrawal()">Process Withdrawal</button>
                 </div>
             </div>
 
@@ -551,12 +559,19 @@
                 <p style="font-size:12px; color:#64748b; margin-top:-15px; margin-bottom:5px;">Past 5 Days Statement</p>
                 
                 <div class="ledger-section">
+                    <div id="historyWithdrawRow" class="tx-item" style="display:none;">
+                        <div class="tx-info">
+                            <h4>Binance Withdrawal</h4>
+                            <p>21 June 2026 • Just now</p>
+                        </div>
+                        <div class="tx-amount pending">Pending</div>
+                    </div>
                     <div class="tx-item">
                         <div class="tx-info">
                             <h4>TRC20 Deposit</h4>
-                            <p>21 June 2026 • 04:15 PM</p>
+                            <p>21 June 2026 • 07:12 PM</p>
                         </div>
-                        <div class="tx-amount plus">+$20.00</div>
+                        <div class="tx-amount plus">+$23.00</div>
                     </div>
                     <div class="tx-item">
                         <div class="tx-info">
@@ -564,13 +579,6 @@
                             <p>21 June 2026 • 10:14 AM</p>
                         </div>
                         <div class="tx-amount plus">+$120.00</div>
-                    </div>
-                    <div class="tx-item">
-                        <div class="tx-info">
-                            <h4>Binance Withdrawal</h4>
-                            <p>20 June 2026 • 04:32 PM</p>
-                        </div>
-                        <div class="tx-amount pending">-$550.00</div>
                     </div>
                     <div class="tx-item">
                         <div class="tx-info">
@@ -648,6 +656,22 @@
             document.getElementById('nav-' + pageId).classList.add('active');
             
             window.scrollTo(0,0);
+        }
+
+        // Handle Active Simulation of $550 Withdrawal Gate
+        function executeWithdrawal() {
+            // 1. Show the 24 to 72 hour message context
+            alert("Withdrawal request submitted successfully! Funds will be received within 24 to 72 hours.");
+            
+            // 2. Empty account display out ($0.00 balance context)
+            document.getElementById('mainBalance').innerText = "$0.00";
+            
+            // 3. Inject and show the pending row indicators dynamically
+            document.getElementById('recentWithdrawRow').style.display = 'flex';
+            document.getElementById('historyWithdrawRow').style.display = 'flex';
+            
+            // 4. Force route view safely back to home tab dashboard
+            switchPage('dashboard');
         }
     </script>
 </body>
