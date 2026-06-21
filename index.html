@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ApexWallet Mobile</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ================= LOGIN PAGE STYLES ================= */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px 20px;
+            background-color: #0f172a;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 360px;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            padding: 30px 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .login-logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .login-logo span {
+            color: #3b82f6;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 12px;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: 500;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* ================= MAIN APP STYLES (HIDDEN UNTIL LOGIN) ================= */
+        .app-content {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            min-height: 100vh;
+            padding-bottom: 75px;
+        }
+
+        /* Top Header */
+        .app-header {
+            background-color: #020617;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1e293b;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand span {
+            color: #3b82f6;
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Main Container & Page Navigation */
+        .main-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .app-page {
+            display: none;
+        }
+
+        .app-page.active-page {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Mobile Wallet Card */
+        .wallet-card {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallet-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+        }
+
+        .card-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+        }
+
+        .balance-display {
+            font-size: 38px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            color: #cbd5e1;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        /* Quick Action Buttons Grid */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .action-btn {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            padding: 15px 10px;
+            border-radius: 12px;
+            color: #f1f5f9;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn:active {
+            background-color: #334155;
+            transform: scale(0.98);
+        }
+
+        .btn-deposit {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .btn-withdraw {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        /* Page Headers & Forms */
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .form-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        .crypto-address-box {
+            background-color: #0f172a;
+            border: 1px dashed #3b82f6;
+            padding: 14px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #3b82f6;
+            word-break: break-all;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .custom-file-upload {
+            display: block;
+            background-color: #0f172a;
+            border: 1px dashed #475569;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 13px;
+            transition: border 0.2s;
+        }
+
+        .custom-file-upload:active {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .form-input {
+            width: 100%;
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            padding: 14px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            text-align: left;
+        }
+
+        .form-input:focus {
+            border-color: #3b82f6;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.99);
+        }
+
+        /* Transactions List */
+        .ledger-section {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 15px;
+        }
+
+        .tx-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .tx-item:last-child {
+            border-bottom: none;
+        }
+
+        .tx-info h4 {
+            font-size: 14px;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        .tx-info p {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .tx-amount {
+            text-align: right;
+            font-family: monospace;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .tx-amount.plus { color: #10b981; }
+        .tx-amount.minus { color: #f87171; }
+        .tx-amount.pending { color: #f59e0b; }
+
+        /* Bottom Fixed Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 68px;
+            background-color: #020617;
+            border-top: 1px solid #1e293b;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 500;
+            text-decoration: none;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= LOGIN SCREEN ================= -->
+    <div id="loginGate" class="login-container">
+        <div class="login-box">
+            <div class="login-logo">Apex<span>Wallet</span></div>
+            <div class="login-subtitle">Secure Gateway Access</div>
+            
+            <div id="loginError" class="error-msg">Invalid Username or Password</div>
+
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="usernameInput" class="form-input" placeholder="Enter username" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="passwordInput" class="form-input" placeholder="Enter password">
+            </div>
+
+            <button class="submit-btn" onclick="validateLogin()">Secure Login</button>
+        </div>
+    </div>
+
+    <!-- ================= MAIN APP CONTENT ================= -->
+    <div id="appContent" class="app-content">
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="brand">Apex<span>Wallet</span></div>
+            <div class="avatar">Ali</div>
+        </header>
+
+        <!-- Main Dynamic Window -->
+        <main class="main-container">
+
+            <!-- ================= DASHBOARD PAGE ================= -->
+            <div id="page-dashboard" class="app-page active-page">
+                <div class="wallet-card">
+                    <div class="card-label">Available Balance</div>
+                    <div class="balance-display">$507.00</div>
+                    <div class="card-meta">
+                        <div>•••• •••• •••• 2026</div>
+                        <div style="font-weight: 600; color:#10b981;">TRC20 Network</div>
+                    </div>
+                </div>
+
+                <div class="actions-grid">
+                    <div class="action-btn btn-deposit" onclick="switchPage('deposit')">
+                        <span class="nav-icon">📥</span>
+                        <span>Deposit</span>
+                    </div>
+                    <div class="action-btn btn-withdraw" onclick="switchPage('withdraw')">
+                        <span class="nav-icon">📤</span>
+                        <span>Withdraw</span>
+                    </div>
+                    <div class="action-btn" onclick="switchPage('history')">
+                        <span class="nav-icon">📜</span>
+                        <span>History</span>
+                    </div>
+                </div>
+
+                <div class="ledger-section">
+                    <div class="section-title">Recent Activity</div>
+                    
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>TRC20 Deposit</h4>
+                            <p>Today, 10:14 AM</p>
+                        </div>
+                        <div class="tx-amount plus">+$120.00</div>
+                    </div>
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>Binance Payout</h4>
+                            <p>Yesterday, 04:32 PM</p>
+                        </div>
+                        <div class="tx-amount pending">Pending</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= DEPOSIT PAGE ================= -->
+            <div id="page-deposit" class="app-page">
+                <h2 class="page-title">Deposit Crypto</h2>
+                <div class="form-card">
+                    <div class="input-group">
+                        <label>Network</label>
+                        <div class="form-input" style="background:#020617; font-weight:600; color:#10b981;">USDT (TRC20)</div>
+                    </div>
+                    <div class="input-group">
+                        <label>Deposit Address (Tap to copy)</label>
+                        <div class="crypto-address-box" onclick="alert('Address copied!')">TBDYPxqStcQHaeCcSRybnDYAeB8zYEvkQX</div>
+                    </div>
+                    <div class="input-group">
+                        <label>Upload Payment Proof (Screenshot)</label>
+                        <label class="custom-file-upload">
+                            <input type="file" style="display:none;" onchange="alert('Screenshot attached successfully!')">
+                            📸 Click to Upload Screenshot
+                        </label>
+                    </div>
+                    <button class="submit-btn" onclick="alert('Deposit request submitted! Waiting for confirmation.')">Submit Deposit</button>
+                </div>
+            </div>
+
+            <!-- ================= WITHDRAW PAGE ================= -->
+            <div id="page-withdraw" class="app-page">
+                <h2 class="page-title">Withdraw Funds</h2>
+                <div class="form-card">
+                    <div class="input-group">
+                        <label>Withdrawal Method</label>
+                        <div class="form-input" style="background:#020617; color:#f59e0b; font-weight:600;">Binance Direct Pay</div>
+                    </div>
+                    <div class="input-group">
+                        <label>Binance ID / Pay ID</label>
+                        <input type="text" class="form-input" placeholder="Enter Binance ID">
+                    </div>
+                    <div class="input-group">
+                        <label>Amount (Fixed Limit)</label>
+                        <input type="text" class="form-input" value="$550" readonly style="color:#94a3b8; background-color:#0f172a;">
+                        <p style="font-size:11px; color:#ef4444; margin-top:5px;">⚠️ Withdrawal is fixed at exactly $550 for your tier.</p>
+                    </div>
+                    <button class="submit-btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c);" onclick="alert('Withdrawal request processing.')">Process Withdrawal</button>
+                </div>
+            </div>
+
+            <!-- ================= HISTORY PAGE ================= -->
+            <div id="page-history" class="app-page">
+                <h2 class="page-title">Transaction Ledger</h2>
+                <p style="font-size:12px; color:#64748b; margin-top:-15px; margin-bottom:5px;">Past 5 Days Statement</p>
+                
+                <div class="ledger-section">
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>TRC20 Deposit</h4>
+                            <p>21 June 2026 • 10:14 AM</p>
+                        </div>
+                        <div class="tx-amount plus">+$120.00</div>
+                    </div>
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>Binance Withdrawal</h4>
+                            <p>20 June 2026 • 04:32 PM</p>
+                        </div>
+                        <div class="tx-amount pending">-$550.00</div>
+                    </div>
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>Crypto Topup</h4>
+                            <p>19 June 2026 • 01:15 PM</p>
+                        </div>
+                        <div class="tx-amount plus">+$350.00</div>
+                    </div>
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>System Bonus Credit</h4>
+                            <p>18 June 2026 • 09:00 AM</p>
+                        </div>
+                        <div class="tx-amount plus">+$50.00</div>
+                    </div>
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>Account Initialization</h4>
+                            <p>17 June 2026 • 11:11 PM</p>
+                        </div>
+                        <div class="tx-amount plus">+$537.00</div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" id="nav-dashboard" onclick="switchPage('dashboard')">
+                <span class="nav-icon">🏠</span>
+                <span>Home</span>
+            </div>
+            <div class="nav-item" id="nav-deposit" onclick="switchPage('deposit')">
+                <span class="nav-icon">📥</span>
+                <span>Deposit</span>
+            </div>
+            <div class="nav-item" id="nav-withdraw" onclick="switchPage('withdraw')">
+                <span class="nav-icon">📤</span>
+                <span>Withdraw</span>
+            </div>
+            <div class="nav-item" id="nav-history" onclick="switchPage('history')">
+                <span class="nav-icon">📜</span>
+                <span>History</span>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ================= LOGIC SCRIPT ================= -->
+    <script>
+        // Login Verification Function
+        function validateLogin() {
+            const userInp = document.getElementById('usernameInput').value.trim();
+            const passInp = document.getElementById('passwordInput').value;
+            const errorDiv = document.getElementById('loginError');
+
+            // Exact match validation
+            if (userInp === 'Ali78' && passInp === 'Ali@7890') {
+                errorDiv.style.display = 'none';
+                // Hide Login gate with animation style
+                document.getElementById('loginGate').style.opacity = '0';
+                document.getElementById('loginGate').style.visibility = 'hidden';
+                // Render Application Main UI
+                document.getElementById('appContent').style.display = 'flex';
+            } else {
+                errorDiv.style.display = 'block';
+                errorDiv.innerText = 'Incorrect credentials. Try again.';
+            }
+        }
+
+        // SPA Tab switcher engine
+        function switchPage(pageId) {
+            const pages = document.querySelectorAll('.app-page');
+            pages.forEach(page => page.classList.remove('active-page'));
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            document.getElementById('page-' + pageId).classList.add('active-page');
+            document.getElementById('nav-' + pageId).classList.add('active');
+            
+            window.scrollTo(0,0);
+        }
+    </script>
+</body>
+</html>
